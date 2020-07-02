@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata: # ReplicaSet
+  name: myapp-replicaset
+  labels:
+    app: myapp
+    type: front-end
+spec: # ReplicaSet
+  template:
+    metadata: # Pod
+      name: myapp-pod
+      labels:
+        app: myapp
+        type: front-end
+    spec: # Pod
+      containers:
+      - name: nginx-controller
+        image: nginx
+  replicas: 3
+  selector: # See note at bottom 1.
+    matchLabels:
+      type: front-end
+
+
+
+
+
+
+# 1. This is one of the major differences between replication controllers
+# and replica sets. The selector can be used to take into account
+# pods that were created outside of the replicaset definitions
+# such as pods that were created before the replicaset
