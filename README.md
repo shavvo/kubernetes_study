@@ -66,3 +66,48 @@ __Rollback to previous revision:__
 ```
 $ kubectl rollout undo deployment mynginx --to-revision=1
 ```
+
+__Get everything on a cluster__
+```
+$ kubectl get all
+```
+
+__Create a resource from a file__
+```
+$ kubectl create -f filename
+```
+
+__More detailed information__
+```
+$ kubectl get {something} -o wide
+```
+
+__Update resources with new information from definition file__
+```
+$ kubectl replace -f filename
+```
+
+__Edit existing resource__
+```
+$ kubectl edit {resource} {name}
+```
+
+__Get definitions of existing resource in yaml (can be used as a backup)__
+```
+$ kubectl get {resource} -o yaml
+```
+
+__Create a simple pod__
+```
+$ kubectl run nginx --image=nginx
+```
+
+__Generate a pod manifest yaml file__
+```
+$ kubectl run nginx --image=nginx --dry-run=client -o yaml
+```
+
+__Change namespace__
+```
+$ kubectl config set-context $(kubectl config current-context) --namespace=space-name
+```
