@@ -104,7 +104,7 @@ $ kubectl run nginx --image=nginx
 
 __Generate a pod manifest yaml file__
 ```
-$ kubectl run nginx --image=nginx --dry-run=client -o yaml
+$ kubectl run nginx --image=nginx --dry-run=client -o yaml > pod-definition.yaml
 ```
 
 __Change namespace__
