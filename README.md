@@ -39,6 +39,9 @@
 `ip -n red link set veth-red up`: bring up the veth-red interface
 
 
+## Kubernetes Specific: 
+
+### Assign a pod to a specific node
 
 
 To assign a pod to a specific node the following can be added in the `spec` section of the definition file:
@@ -47,16 +50,16 @@ To assign a pod to a specific node the following can be added in the `spec` sect
 nodeName: <name of node>
 ```
 
-kubelet service configuration:
+### kubelet service configuration:
 `/etc/systemd/system/kubelet.service`
 
-Check kubelet logs:
+### Check kubelet logs:
 `sudo journalctl -u kubelet`
 
-Verify kubelet certificates:
+### Verify kubelet certificates:
 `openssl x509 -in /path/to/cert.crt -text`
 
-Get cluster info:
+### Get cluster info:
 `kubectl cluster-info`
 
 ### Find api resources:
@@ -99,7 +102,7 @@ kubectl get pod -o wide
 ```
 Ex:
 
-kubectl describe pod 
+kubectl describe pod podname
 ```
 
 
@@ -123,7 +126,7 @@ kubectl describe pod
 
   `kubectl create -f .`
 
-# More Specific commands:
+## More Specific commands:
 
 ### Create an nginx pod:
 `kubectl run nginx --image=nginx`
@@ -137,10 +140,37 @@ This will perform a dry run as the `--dry-run=client` is present in the command.
 ```
 `kubectl run nginx --image=nginx --dry-run=client -o yaml`
 
+### Create a namespace from cli
+`kubectl create namespace name`
+
+### Change namespace
+`kubectl config set-context $(kubectl config current-context) --namespace=space-name`
+
+
+# Pods
+
+* https://kubernetes.io/docs/concepts/workloads/pods/
+
+### Get information about pods on a certain namespace
+`kubectl get pods --namespace=space-name`
+
+### Create a pod from definition file in certain namespace
+`kubectl create -f definition-file.yaml --namespace=space-name`
+
+### Assign a pod to a node if the pod is already created. Create a binding object and send a POST request to the pods binding API. 
+
+*First thing is to create a pod binding definition file and then convert that file to json. Then send the curl request to the API* 
+
+`curl --header "Content-Type:application/json" --request POST --data '{"apiVersion":"v1"....} http://$SERVER/api/v1/namespaces/default/pods/$PODNAME/binding/`
+
+### Get a pod based off of label/selector 
+
+`kubectl get pod --selector app=App1`
 
 
 # ReplicaSet
 
+* https://kubernetes.io/docs/concepts/workloads/controllers/replicaset/
 
 A replicasets purpose is to maintain a stable set of replica Pods running at any given time. It is often used to guarantee the availability of a specified number of pods. 
 
@@ -199,6 +229,7 @@ spec:
 
 # Deployments:
 
+* https://kubernetes.io/docs/concepts/workloads/controllers/deployment/
 
 A Deployment provides declarative updates for pods replicasets. A desired state is described in a Deployment and the Deployment Controller changes the current state to the desired state in a controller rate. 
 
@@ -240,19 +271,11 @@ spec:
         - containerPort: 80
 ```
 
-### Get information about pods on a certain namespace
-`kubectl get pods --namespace=space-name`
+# Services
 
-### Create a pod from definition file in certain namespace
-`kubectl create -f definition-file.yaml --namespace=space-name`
+* https://kubernetes.io/docs/concepts/services-networking/service/
 
-### Create a namespace from cli
-`kubectl create namespace name`
-
-### Change namespace
-`kubectl config set-context $(kubectl config current-context) --namespace=space-name`
-
-### Create a service named redis-service to type ClusterIP to expose pod redis on port 6379
+### Create a named redis-service to type ClusterIP to expose pod redis on port 6379
 *This will automatically use the pods labels as selectors*
 
 ``kubectl expose pod redis --port=6379 --name redis-service --dry-run=client -o yaml``
@@ -270,16 +293,6 @@ This will not use the pods labels as selectors, instead it will assume selectors
 *This will not use the pods labels as selectors*
 
 `kubectl create service nodeport nginx --tcp=80:80 --node-port=30080 --dry-run=client -o yaml`
-
-### Assign a pod to a node if the pod is already created. Create a binding object and send a POST request to the pods binding API. 
-
-*First thing is to create a pod binding definition file and then convert that file to json. Then send the curl request to the API* 
-
-`curl --header "Content-Type:application/json" --request POST --data '{"apiVersion":"v1"....} http://$SERVER/api/v1/namespaces/default/pods/$PODNAME/binding/`
-
-### Get a pod based off of label/selector 
-
-`kubectl get pod --selector app=App1`
 
 
 
