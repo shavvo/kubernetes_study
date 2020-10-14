@@ -298,6 +298,8 @@ This will not use the pods labels as selectors, instead it will assume selectors
 
 # Taints and Tolerations
 
+* https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/
+
 ### Taints happen on the Node
 `kubectl taint nodes node-name key=value:taint-effect`
    ```
@@ -319,21 +321,44 @@ This will not use the pods labels as selectors, instead it will assume selectors
 Add tolerations to pod definitions as: (using example kubectl from above)
 
 ```yaml
-    tolerations:
-      key:"app"
-      operator:"Equal"
-      value: "blue"
-      effect: "NoSchedule"
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+  labels:
+    env: test
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+    imagePullPolicy: IfNotPresent
+  tolerations:
+  - key: "example-key"
+    operator: "Exists"
+    effect: "NoSchedule"
       
 ```
 # Node Selectors
+
+* https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector
 
 *Can be used to identify which node to create the pod on
 Add within the pod definition file.*
 
 ```yaml
-    nodeSelector:
-      size: Large # Will match the label of `size: Large` on the node
+  apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+  labels:
+    env: test
+spec:
+  containers:
+  - name: nginx
+    image: nginx
+    imagePullPolicy: IfNotPresent
+  nodeSelector:
+    disktype: ssd
 ```
 ### Label Nodes:
 
@@ -348,20 +373,38 @@ Add within the pod definition file.*
 
 # Node Affinity
 
+* https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+
 Ensure pods are hosted on particular nodes.
 Add within definition file. Useful for a set of nodes with different labels. IE add pods to nodes that contain [x, y, z] labels
 
 ```yaml
-    affinity:
-      nodeAffinity:
-        requiredDuringSchedulingIgnoreDuringExecution:
-          nodeSelectorTerms:
-            - matchExpressions:
-              - key: size
-                operator: In
-                values:
-                - Large
-                - Medium
+    apiVersion: v1
+kind: Pod
+metadata:
+  name: with-node-affinity
+spec:
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+        - matchExpressions:
+          - key: kubernetes.io/e2e-az-name
+            operator: In
+            values:
+            - e2e-az1
+            - e2e-az2
+      preferredDuringSchedulingIgnoredDuringExecution:
+      - weight: 1
+        preference:
+          matchExpressions:
+          - key: another-node-label-key
+            operator: In
+            values:
+            - another-node-label-value
+  containers:
+  - name: with-node-affinity
+    image: k8s.gcr.io/pause:2.0
 ```
 
 *Example deployment with node affinity:*
@@ -397,6 +440,8 @@ spec:
 
 # Resources and Requests
 
+* https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/
+
 *When a pod is created the containers are assigned a default CPU request of .5 and memory of 256Mi. For the POD to pick up those defaults you must have first set those as default values for request and limit by creating a LimitRange in that namespace.*
 
 ```yaml
@@ -426,6 +471,7 @@ spec:
 
 # Daemon Sets
 
+* https://kubernetes.io/docs/concepts/workloads/controllers/daemonset/
 
 *A DaemonSet ensures that all (or some) Nodes run a copy of a Pod. As nodes are added to a cluster, Pods are added to those nodes. As nodes are removed from the cluster, the Pods are garbage collected. Deleting a DaemonSet will clean up the Pods created in it. *
 
@@ -447,8 +493,12 @@ image: whatever image it says (will use nginx for simplicity)
 
 *Edit the kind to `DaemonSet` and change the name and namespace to what is specified. Make sure selectors and labels are correct and modify the image to the correct image. Remove anything else.* 
 
+* https://raw.githubusercontent.com/kubernetes/website/master/content/en/examples/controllers/daemonset.yaml
+
 
 # Static Pods
+
+* https://kubernetes.io/docs/tasks/configure-pod-container/static-pod/
 
 Kubelet can manage a node indepenently. If no API server is available to provide pod creation instructions, the kubelet can be configured to look for manifests on the server. Place POD manifests within `/etc/kubernetes/manifests` as a default. However, the directory can be configured to be anything. 
 
@@ -493,6 +543,10 @@ Creating a Static Pod on whatever node you are on:
 
 
 # Scheduler
+
+* https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/
+
+A scheduler watches for newly created Pods that have no Node assigned. For every Pod that the scheduler discovers, the scheduler becomes responsible for finding the best Node for that Pod to run on. The scheduler reaches this placement decision taking into account the scheduling principles described below.
 
 
 ### How to find where the kube-scheduler.yaml lives:
@@ -563,6 +617,8 @@ To look at the logs for the scheduler run the following:
 
 # Monitoring
 
+* https://kubernetes.io/docs/tasks/debug-application-cluster/resource-usage-monitoring/
+
 Mertics Server:
 
 One metrics server per cluster. Only an in memory monitoring
@@ -599,6 +655,7 @@ for an individual one by using the following:
 
 # Updates and Rollouts
 
+* https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#updating-a-deployment
 
 Rollouts are versions or revisions of an application
 
