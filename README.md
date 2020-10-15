@@ -275,6 +275,8 @@ spec:
 
 * https://kubernetes.io/docs/concepts/services-networking/service/
 
+An abstract way to expose an application running on a set of Pods as a network service.
+
 ### Create a named redis-service to type ClusterIP to expose pod redis on port 6379
 *This will automatically use the pods labels as selectors*
 
