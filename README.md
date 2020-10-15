@@ -302,6 +302,10 @@ This will not use the pods labels as selectors, instead it will assume selectors
 
 * https://kubernetes.io/docs/concepts/scheduling-eviction/taint-and-toleration/
 
+Node affinity, is a property of Pods that attracts them to a set of nodes (either as a preference or a hard requirement). Taints are the opposite -- they allow a node to repel a set of pods.
+
+Tolerations are applied to pods, and allow (but do not require) the pods to schedule onto nodes with matching taints.
+
 ### Taints happen on the Node
 `kubectl taint nodes node-name key=value:taint-effect`
    ```
@@ -343,6 +347,8 @@ spec:
 # Node Selectors
 
 * https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#nodeselector
+
+nodeSelector is the simplest recommended form of node selection constraint. nodeSelector is a field of PodSpec. It specifies a map of key-value pairs. 
 
 *Can be used to identify which node to create the pod on
 Add within the pod definition file.*
@@ -706,6 +712,12 @@ run the kubectl set command:
 
 # Config Maps:
 
+* https://kubernetes.io/docs/concepts/configuration/configmap/
+
+A ConfigMap is an API object used to store non-confidential data in key-value pairs. Pods can consume ConfigMaps as environment variables, command-line arguments, or as configuration files in a volume.
+
+A ConfigMap allows you to decouple environment-specific configuration from your container images, so that your applications are easily portable.
+
 Two phases of creating a config map. 
 
 ### Create the config map:
@@ -778,6 +790,13 @@ pod-definition.yaml
 
 
 # Secrets:
+
+* https://kubernetes.io/docs/concepts/configuration/secret/
+
+Kubernetes Secrets let you store and manage sensitive information, such as passwords, OAuth tokens, and ssh keys. Storing confidential information in a Secret is safer and more flexible than putting it verbatim in a Pod definition or in a container image.
+
+A Secret is an object that contains a small amount of sensitive data such as a password, a token, or a key. Such information might otherwise be put in a Pod specification or in an image.
+
 
 Two ways of creating a secret:
 
@@ -852,6 +871,10 @@ secret. The name of the file will be the key and the contents of the file will b
 
 # Multi container pods
 
+* https://kubernetes.io/docs/concepts/workloads/pods/#how-pods-manage-multiple-containers
+
+A Pod can encapsulate an application composed of multiple co-located containers that are tightly coupled and need to share resources. 
+
 
 Modify the spec to have multiple containers
 
@@ -881,6 +904,8 @@ Modify the spec to have multiple containers
 
 
 # init containers
+
+* https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
 
 An init container is configured in a pod like all other containers.
 However, it is specified within the `initContainers` section.
@@ -929,7 +954,7 @@ Multiple initContainers can be created as well. In this case, each init containe
       command: ['sh', '-c', 'until nslookup mydb; do echo waiting for mydb; sleep 2; done;']
 ```
 
-If any of the initContainers fail to complete, kubernetes will restart the pod until the initContainer succeeds.
+If any of the initContainers fail to complete, kubernetes will restart the pod until the initContainer succeeds. However, if the Pod has a restartPolicy of Never, and an init container fails during startup of that Pod, Kubernetes treats the overall Pod as failed.
 
 
 
