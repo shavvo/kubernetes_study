@@ -39,6 +39,47 @@
 `ip -n red link set veth-red up`: bring up the veth-red interface
 
 
+# What is kubernetes?
+
+* https://kubernetes.io/docs/concepts/overview/components/
+
+Kubernetes is a portable, extensible, open-source platform for managing containerized workloads and services, that facilitates both declarative configuration and automation. It has a large, rapidly growing ecosystem. Kubernetes services, support, and tools are widely available.
+
+### kube-apiserver:
+
+The API server is a component of the Kubernetes control plane that exposes the Kubernetes API. The API server is the front end for the Kubernetes control plane.
+
+### etcd:
+
+Consistent and highly-available key value store used as Kubernetes' backing store for all cluster data.
+
+### kube-scheduler:
+
+Control plane component that watches for newly created Pods with no assigned node, and selects a node for them to run on.
+
+### kube-controller-manager:
+
+Control Plane component that runs controller processes.
+
+## Node Components:
+
+### kubelet: 
+
+An agent that runs on each node in the cluster. It makes sure that containers are running in a Pod.
+
+The kubelet takes a set of PodSpecs that are provided through various mechanisms and ensures that the containers described in those PodSpecs are running and healthy. The kubelet doesn't manage containers which were not created by Kubernetes.
+
+
+### kube-proxy:
+
+kube-proxy is a network proxy that runs on each node in your cluster, implementing part of the Kubernetes Service concept.
+
+kube-proxy maintains network rules on nodes. These network rules allow network communication to your Pods from network sessions inside or outside of your cluster.
+
+kube-proxy uses the operating system packet filtering layer if there is one and it's available. Otherwise, kube-proxy forwards the traffic itself.
+
+
+
 ## Kubernetes Specific: 
 
 ### Assign a pod to a specific node
