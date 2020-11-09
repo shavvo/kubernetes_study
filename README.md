@@ -1214,6 +1214,8 @@ After the restore has completed, the etcd.yaml needs to be modified to update so
 ### Authentication
 
 
+https://kubernetes.io/docs/reference/access-authn-authz/authentication/
+
 
 Static password and token files: (not recommended)
 
@@ -1331,6 +1333,8 @@ Once created, you can authenticate to the kube-api server using the users creden
 
 ### TLS
 
+https://kubernetes.io/docs/reference/access-authn-authz/authentication/#x509-client-certs
+
 
 Basic OpenSSL generation commands:
 
@@ -1436,6 +1440,10 @@ The output will give the certificate in the base64 encoded form. It will still n
   
   # KubeConfig:
   
+  
+  https://kubernetes.io/docs/concepts/configuration/organize-cluster-access-kubeconfig/
+  
+  
   By default `kubeconfig` looks for a configuration file in the users home directory. `$home/.kube/config`. The config file will contain certain variables such as which server to run on, certificate, key and ca cert.
   
   
@@ -1528,6 +1536,10 @@ The output will give the certificate in the base64 encoded form. It will still n
   
   
   # API GROUPS:
+  
+  
+  https://kubernetes.io/docs/concepts/overview/kubernetes-api/#api-groups-and-versioning
+  
   
   *Note*: You cannot access these apis (aside from smaller ones like version) without authenticating first. You can either pass in your certificate details with each command, or you can start up a `kubectl proxy service` which will load up the details of your certificates from your kubeconfig file. The proxy launches on localhost on port 8001.
   
@@ -1744,6 +1756,11 @@ The output will give the certificate in the base64 encoded form. It will still n
   
 # Cluster roles and bindings
 
+
+https://kubernetes.io/docs/reference/access-authn-authz/rbac/#role-and-clusterrole
+https://kubernetes.io/docs/reference/access-authn-authz/rbac/#rolebinding-and-clusterrolebinding
+
+
 There are a couple different bindings `namespaced` and `non-namespaced` 
 
 ```
@@ -1803,6 +1820,10 @@ roleRef:
   
 # Security Contexts
 
+
+https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+
+
 As a general note, if you cannot get the information about a certain container setting or feature, you can always `exec` into the container and try to get it. 
 
 IE: to see what user a container is running commands as:
@@ -1860,6 +1881,8 @@ spec:
 
 # Networking Policies:
 
+
+https://kubernetes.io/docs/concepts/services-networking/network-policies/
 
 
 Two types of traffic:
@@ -1943,6 +1966,9 @@ See network policies:
 # Storage:
 
 
+https://kubernetes.io/docs/concepts/storage/
+
+
 
 ### Docker Storage:
 
@@ -1980,6 +2006,8 @@ Docker stores data on the local file system by creating a folder structure at `/
   
   
 ### Volumes:
+
+https://kubernetes.io/docs/concepts/storage/volumes/
 
 
 Simple volume mount:
@@ -2023,6 +2051,8 @@ volumes:
   
 
 ### Persistent Volumes:
+
+https://kubernetes.io/docs/concepts/storage/persistent-volumes/
 
 A persistent volume is a cluster wide pool of volumes configured by an admin to be used by users deploying applications on the cluster. 
 
@@ -2069,6 +2099,10 @@ ReadWriteMany (RWX)- Volume can be mounted as read-write by many nodes
 
 
 ### Persistent Volume Claims
+
+
+https://kubernetes.io/docs/concepts/storage/persistent-volumes/#lifecycle-of-a-volume-and-claim
+
 
 Persistent Volume Claims (PVC) are separate from Persistent Volumes (PV) themselves.
 
@@ -2136,6 +2170,10 @@ spec:
   
 ### Storage classes:
 
+
+https://kubernetes.io/docs/concepts/storage/storage-classes/
+
+
 *Static Provisioning*:
 
 When PVs are defined within manifests, the storage disk must be manually created first. 
@@ -2184,6 +2222,9 @@ spec:
 # Networking:
 
 
+https://kubernetes.io/docs/concepts/services-networking/network-policies/
+
+
 Kubernetes networking model:
 
 ```
@@ -2214,11 +2255,19 @@ Check to see which network plugin is used on the node:
   
 # Ingress
 
+
+https://kubernetes.io/docs/concepts/services-networking/ingress/
+
+
 An api object that manages external access to services within a cluster. (Typically HTTP)
 
 Ingress may provide loadbalancing, SSL termination and name-based virtual hosting. Ingress exposes HTTP and HTTPS routes from outside the cluster to services within the cluster. Traffic routing is controller by rules defined on the ingress resource. 
 
 ### Ingress Controller:
+
+
+https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/
+
 
 In order for the ingress resource to work, the cluster must have an ingress controller running. unlike other typs of controllers which run as a part of the `kube-controller-manager` binary, Ingress controllers are not started automatically with a cluster. 
 
@@ -2331,6 +2380,10 @@ metadata:
 
 ### Ingress Resources
 
+
+https://kubernetes.io/docs/concepts/services-networking/ingress/#resource-backend
+
+
 A set of rules and configurations applied on the ingress controller. This is where you can configure different portions of the site to point to different resources on the cluster. It is done through a definition file.
 
 To separate traffic to go to a certain place: IE example.com/app goes to pod 1, a rule will need to be defined.
@@ -2408,6 +2461,10 @@ spec:
   
 # Cluster setup via kubeadm
 
+https://kubernetes.io/docs/reference/setup-tools/kubeadm/
+https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/
+
+
 1. Designate vms for the cluster. IE: master and workers:
 2. install the container runtime engine (Docker):
 3. install kubeadm: This needs to be done on both master and worker nodes.: 
@@ -2452,6 +2509,8 @@ spec:
   
 # JSON Path
 
+
+https://kubernetes.io/docs/reference/kubectl/jsonpath/
 
   
   get information on resources in json format
