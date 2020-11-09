@@ -1019,6 +1019,9 @@ To make a node unscheduleable, you can cordon the node:
 # Cluster Upgrade process
 
 
+https://kubernetes.io/docs/tasks/administer-cluster/kubeadm/kubeadm-upgrade/
+
+
 The control plane components can be different versions.
 
 The kube-apiserver is the catalyst:
