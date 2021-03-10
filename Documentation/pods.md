@@ -14,6 +14,16 @@ A Pod (as in a pod of whales or pea pod) is a group of one or more containers, w
 
 `kubectl get pod --selector app=App1`
 
+### Create a pod from cli
+`kubectl run nginx --image=nginx`
+
+*creates a pod named `nginx` with the image `nginx`*
+
+### Generate a pod definition manifest
+`kubectl run nginx --image=nginx --dry-run=client -o yaml > pod.yaml`
+
+*dry runs the creation of a pod named `nginx` with the image of `nginx` and outputs it into a yaml format to the file `pod.yaml`*
+
 ### Create a pod from definition file in certain namespace
 `kubectl create -f definition-file.yaml --namespace=space-name`
 
