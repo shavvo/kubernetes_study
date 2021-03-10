@@ -7,7 +7,9 @@ A replicasets purpose is to maintain a stable set of replica Pods running at any
 A replicaSet ensures that a specified number of pod replicas are running at any given time. However, a *deployment* is a higher-level concept that manages ReplicaSets and provides declarative updates to pods along with a lot of other useful features. Therefore, using Deployments is recommended
 over using ReplicaSets, unless a custom update orchestration is required. 
 
+Shorthand for replicaset is `rs`:
 
+`kubectl get rs`
 
 ### Delete a resource (such as a replica set):
 *This will also delete the pods under the replica set*
@@ -17,6 +19,9 @@ over using ReplicaSets, unless a custom update orchestration is required.
 
 ### Edit existing image (such as a replicaset):
 `kubectl edit replicaset {name}`
+
+### Scale up or down an existing replicaset:
+`kubectl scale rs {name} --replicas=4`
 
 
 ### Grab output of a resource in yaml. As a backup if you dont have the definitions:
